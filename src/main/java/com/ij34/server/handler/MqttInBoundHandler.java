@@ -55,10 +55,10 @@ public class MqttInBoundHandler  extends ChannelInboundHandlerAdapter {
         log.info("channelRead:"+msg);
         MqttMessage mqttMessage = null;
         switch (msg.fixedHeader().messageType()){
-            case CONNECT:
+            case CONNECT:   //连接
                 mqttMessage= ConnectHandler.getInstance().doMessage(ctx.channel(), obj);
                 break;
-            case DISCONNECT:
+            case DISCONNECT: //断开连接
                 DisconnectHandler.getInstance().deleteMessage(ctx.channel());
                 ctx.close();
                 break;
