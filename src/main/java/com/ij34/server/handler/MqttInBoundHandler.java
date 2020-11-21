@@ -84,7 +84,7 @@ public class MqttInBoundHandler  extends ChannelInboundHandlerAdapter {
                 break;
         }
 
-        if (mqttMessage != null) {
+        if (mqttMessage != null) {//ack
             ctx.channel().writeAndFlush(mqttMessage);
         }
 
