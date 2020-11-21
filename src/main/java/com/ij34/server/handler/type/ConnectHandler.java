@@ -23,7 +23,7 @@ public class ConnectHandler {
     }
 
     public MqttMessage doMessage(Channel channel, Object obj) throws Exception {
-         MqttConnectMessage msg = (MqttConnectMessage) obj;
+        MqttMessage msg = (MqttMessage) obj;
         SocketAddress address= channel.remoteAddress();
         String  channelID = channel.id().asLongText();
         log.info("连接ID："+channelID+"|"+address.toString());
@@ -37,7 +37,7 @@ public class ConnectHandler {
          MqttConnectVariableHeader connectVariableHeader = (MqttConnectVariableHeader) msg.variableHeader();
          String protocolName = connectVariableHeader.name();
          if (!protocolName.equalsIgnoreCase("MQTT")) { // 非规范MQTT协议
-             log.error("非规范MQTT协议");
+             log.error("非规范MQTT协议:"+protocolName);
              throw new MqttIdentifierRejectedException("非规范MQTT协议");   // 直接网络关闭连接
          }
          // 检查MQTT协议版本
