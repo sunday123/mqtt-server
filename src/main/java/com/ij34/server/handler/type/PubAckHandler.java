@@ -1,7 +1,7 @@
 package com.ij34.server.handler.type;
 
 import io.netty.handler.codec.mqtt.MqttMessage;
-import io.netty.handler.codec.mqtt.MqttPublishVariableHeader;
+import io.netty.handler.codec.mqtt.MqttPubReplyMessageVariableHeader;
 import org.apache.log4j.Logger;
 
 public class PubAckHandler {
@@ -19,10 +19,9 @@ public class PubAckHandler {
 
     public MqttMessage doMessage(MqttMessage msg) {
         log.info("MQTT PUBACK");
-
-        MqttPublishVariableHeader publishVariableHeader = (MqttPublishVariableHeader) msg.variableHeader();
-        int packetId = publishVariableHeader.packetId();
-       log.info("pub删除："+packetId);
+        MqttPubReplyMessageVariableHeader publishVariableHeader = (MqttPubReplyMessageVariableHeader) msg.variableHeader();
+        int messageId = publishVariableHeader.messageId();
+       log.info("pub删除messageId："+messageId);
 
         return null;
     }
