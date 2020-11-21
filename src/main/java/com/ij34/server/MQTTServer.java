@@ -56,14 +56,6 @@ public class MQTTServer {
 
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-//                     System.out.println("报告");
-//                     System.out.println("信息：有一客户端链接到本服务端");
-//                     System.out.println("IP:" + ch.localAddress().getHostName());
-//                     System.out.println("Port:" + ch.localAddress().getPort());
-//                     System.out.println("报告完毕");
-//
-//                     ch.pipeline().addLast(new EchoServerHandler()); // 客户端触发操作
-//                     ch.pipeline().addLast(new ByteArrayEncoder());
 
 
                             ChannelPipeline pipeline = ch.pipeline();
@@ -76,12 +68,6 @@ public class MQTTServer {
 
                         }
                     });
-//            .option(ChannelOption.SO_REUSEADDR, true)//表示是否允许重用服务器所绑定的地址
-//            .option(ChannelOption.TCP_NODELAY, true);
-
-//            .childOption(ChannelOption.SO_KEEPALIVE, true)
-//            .childOption(ChannelOption.SO_LINGER, 10);
-
             // 服务器绑定端口监听  // 监听服务器关闭监听
             sb.bind(port).sync().channel().closeFuture().sync();
 
