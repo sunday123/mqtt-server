@@ -1,5 +1,5 @@
 *.class
 *.iml
-/.idea/
-/.git/
-/target/
+.idea/
+.git/
+target/
