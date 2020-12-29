@@ -65,7 +65,7 @@ public class PublishHandler {
 
         // 回复PUBACK报文
             log.info("PUBREC报文:"+qoS);
-            fixedHeader = new MqttFixedHeader(MqttMessageType.PUBACK, false, qoS, isRetain, 0);
+            fixedHeader = new MqttFixedHeader(MqttMessageType.PUBACK, false, MqttQoS.AT_MOST_ONCE/*qoS*/, isRetain, 0);
             MqttPubAckMessage pubAckMessage = new MqttPubAckMessage(fixedHeader, MqttMessageIdVariableHeader.from(1));
             return pubAckMessage;
 

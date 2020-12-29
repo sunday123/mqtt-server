@@ -9,6 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.mqtt.MqttMessage;
 import io.netty.handler.codec.mqtt.MqttMessageFactory;
+import io.netty.handler.codec.mqtt.MqttQoS;
 import org.apache.log4j.Logger;
 
 /**
@@ -52,8 +53,9 @@ public class MqttInBoundHandler  extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception {
         MqttMessage msg = (MqttMessage) obj;
-        log.info("channelRead:"+msg);
+//        log.info("channelRead:"+msg);
         MqttMessage mqttMessage = null;
+        log.info("MqttFixedHeader:"+msg.fixedHeader());
         switch (msg.fixedHeader().messageType()){
             case CONNECT:   //连接
                 mqttMessage= ConnectHandler.getInstance().doMessage(ctx.channel(), obj);
@@ -62,10 +64,10 @@ public class MqttInBoundHandler  extends ChannelInboundHandlerAdapter {
                 DisconnectHandler.getInstance().deleteMessage(ctx.channel());
                 ctx.close();
                 break;
-            case PINGREQ:
+            case PINGREQ: //心跳包响应
                 mqttMessage= PingReqHandler.getInstance().doMessage(ctx.channel(), msg);
                 break;
-            case PUBLISH:       // 发布
+            case PUBLISH:       // 发布消息
                 mqttMessage = PublishHandler.getInstance().doMessage(ctx.channel(),msg);
                 break;
 
@@ -85,7 +87,15 @@ public class MqttInBoundHandler  extends ChannelInboundHandlerAdapter {
         }
 
         if (mqttMessage != null) {//ack
-            ctx.channel().writeAndFlush(mqttMessage);
+            if (msg.fixedHeader().qosLevel() == MqttQoS.AT_MOST_ONCE){
+                log.info("收到的客户端的是QoS 0 不回复");
+            }else if(msg.fixedHeader().qosLevel() == MqttQoS.AT_LEAST_ONCE){
+                log.info("收到的是QoS 1");
+                ctx.channel().writeAndFlush(mqttMessage);
+            }else if(msg.fixedHeader().qosLevel() == MqttQoS.EXACTLY_ONCE){
+                log.info("收到的是QoS 2");
+            }
+
         }
 
 

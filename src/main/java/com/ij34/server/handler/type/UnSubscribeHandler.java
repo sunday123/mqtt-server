@@ -35,12 +35,11 @@ public class UnSubscribeHandler {
         MqttUnsubscribePayload mqttUnsubscribePayload = (MqttUnsubscribePayload) msg.payload();
         List<String> topics = mqttUnsubscribePayload.topics();
         for (String topic : topics) {
-            // TODO: 2017/9/22 删除订阅相关信息
             log.info("topic:"+topic);
         }
 
         // --响应报文--
-        MqttFixedHeader mqttFixedHeader = new MqttFixedHeader(MqttMessageType.UNSUBACK, false, MqttQoS.AT_LEAST_ONCE, true, 0);
+        MqttFixedHeader mqttFixedHeader = new MqttFixedHeader(MqttMessageType.UNSUBACK, false, MqttQoS.AT_MOST_ONCE, false, 0);
         messageIdVariableHeader = MqttMessageIdVariableHeader.from(messageId);
         MqttUnsubAckMessage unsubAckMessage = new MqttUnsubAckMessage(mqttFixedHeader, messageIdVariableHeader);
 
